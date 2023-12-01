@@ -1,0 +1,27 @@
+From bfbf6ae8c4f9de2e7d5a4155c9593e8aa43201da Mon Sep 17 00:00:00 2001
+From: Simon Shields <simon@lineageos.org>
+Date: Thu, 11 Jan 2018 01:04:32 +1100
+Subject: HACK: usb: ehci_exynos: enable OHCI_SUSP_LEGACY
+
+no idea what this does, but apparently it's needed for the HSIC modem.
+
+diff -du a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
+--- a/drivers/usb/host/ehci-exynos.c
++++ b/drivers/usb/host/ehci-exynos.c
+@@ -33,6 +33,8 @@
+ 	(EHCI_INSNREG00_ENA_INCR16 | EHCI_INSNREG00_ENA_INCR8 |	\
+ 	 EHCI_INSNREG00_ENA_INCR4 | EHCI_INSNREG00_ENA_INCRX_ALIGN)
+ 
++#define EHCI_INSNREG00_OHCI_SUSP_LEGACY (0x1 << 20)
++
+ static struct hc_driver __read_mostly exynos_ehci_hc_driver;
+ 
+ #define PHY_NUMBER 3
+@@ -283,7 +285,7 @@
+ 		pdev->dev.of_node = NULL;
+ 
+ 	/* DMA burst Enable */
+-	writel(EHCI_INSNREG00_ENABLE_DMA_BURST, EHCI_INSNREG00(hcd->regs));
++	writel(EHCI_INSNREG00_ENABLE_DMA_BURST | EHCI_INSNREG00_OHCI_SUSP_LEGACY, EHCI_INSNREG00(hcd->regs));
+ 
+ 	err = usb_add_hcd(hcd, irq, IRQF_SHARED);

@@ -1,0 +1,10 @@
+--- msm-firmware-loader.sh.old	2023-10-05 07:37:40.000000000 +0100
++++ msm-firmware-loader.sh	2023-11-26 15:38:12.039403014 +0000
+@@ -34,6 +34,7 @@
+ 
+ # List of partitions to be mounted and inspected for blobs.
+ FW_PARTITIONS="
++	RADIO
+ 	apnhlos
+ 	modem$(ab_get_slot)
+ 	persist
