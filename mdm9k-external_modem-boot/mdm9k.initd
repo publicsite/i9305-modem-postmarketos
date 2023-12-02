@@ -1,0 +1,15 @@
+#!/sbin/openrc-run
+supervisor=supervise-daemon
+
+name="MDM9K"
+description="Start MDM9K modem"
+
+command="/usr/sbin/mdm9k-boot"
+
+# https://github.com/andersson/rmtfs/commit/dfb8f3ed1c8fbde621cd08aaf9e7724a4c55cbd1
+respawn_delay=1
+
+depend() {
+	before networkmanager ofono modemmanager rmtfs
+	after udev-settle
+}
