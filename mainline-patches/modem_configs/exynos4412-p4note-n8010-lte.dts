@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * p4notepq LTE
+ *
+ */
+
+/dts-v1/;
+#include "exynos4412-p4note.dtsi"
+#include "modem-exynos4412-p4notepq.dtsi"

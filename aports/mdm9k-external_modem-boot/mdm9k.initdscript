@@ -1,0 +1,44 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          mdm9k
+# Required-Start:    $local_fs $remote_fs $named $time
+# Required-Stop:     $local_fs $remote_fs $named $time
+# Should-Start:      $syslog
+# Should-Stop:       $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Starts the mdm9k modem
+# Description:       Starts The mdm9k modem
+### END INIT INFO
+
+
+name="MDM9K"
+description="Start MDM9K modem"
+NAME="MDM9K"
+DESC="Start MDM9K modem"
+
+pin_name() {
+    sed 's/-/ /' /sys/firmware/devicetree/base/soc/pinctrl@*/$1/samsung,pins
+}
+
+start(){
+echo "Starting modem..."
+gpioset $(pin_name ap2mdm-soft-reset-n)=0
+sleep .005
+gpioset $(pin_name ap2mdm-soft-reset-n)=1
+sleep .010
+gpioset $(pin_name ap2mdm-status)=1
+sleep .010
+mdm9k-boot
+}
+
+stop(){
+echo "Stopping modem..."
+gpioset $(pin_name ap2mdm-status)=0
+sleep .010
+gpioset $(pin_name ap2mdm-soft-reset-n)=1
+sleep .010
+gpioset $(pin_name ap2mdm-soft-reset-n)=0
+sleep .005
+}

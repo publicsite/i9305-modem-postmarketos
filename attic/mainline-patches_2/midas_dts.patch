@@ -1,0 +1,256 @@
+From ec89c78e3b2ff3917540816378565e10dff58c91 Mon Sep 17 00:00:00 2001
+From: Jack Knightly <J__A__K@hotmail.com>
+Date: Sun, 3 Sep 2023 22:18:13 +0100
+Subject: [PATCH] ARM: dts: exynos: n710x-{ea8061|s6evr02} split and add lte
+ dtsi
+
+---
+ arch/arm/boot/dts/Makefile                    |  6 +-
+ arch/arm/boot/dts/exynos4412-i9305.dts        |  1 +
+ arch/arm/boot/dts/exynos4412-midas-lte.dtsi   | 71 +++++++++++++++++++
+ arch/arm/boot/dts/exynos4412-midas.dtsi       | 12 ++++
+ arch/arm/boot/dts/exynos4412-n7100-ea8061.dts |  9 +++
+ .../arm/boot/dts/exynos4412-n7100-s6evr02.dts |  9 +++
+ arch/arm/boot/dts/exynos4412-n7105-ea8061.dts | 10 +++
+ .../arm/boot/dts/exynos4412-n7105-s6evr02.dts | 10 +++
+ ...a8061.dts => exynos4412-n710x-ea8061.dtsi} |  0
+ ...vr02.dts => exynos4412-n710x-s6evr02.dtsi} |  0
+ arch/arm/boot/dts/exynos4412-n710x.dtsi       |  2 -
+ 11 files changed, 126 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm/boot/dts/exynos4412-midas-lte.dtsi
+ create mode 100644 arch/arm/boot/dts/exynos4412-n7100-ea8061.dts
+ create mode 100644 arch/arm/boot/dts/exynos4412-n7100-s6evr02.dts
+ create mode 100644 arch/arm/boot/dts/exynos4412-n7105-ea8061.dts
+ create mode 100644 arch/arm/boot/dts/exynos4412-n7105-s6evr02.dts
+ rename arch/arm/boot/dts/{exynos4412-n710x-ea8061.dts => exynos4412-n710x-ea8061.dtsi} (100%)
+ rename arch/arm/boot/dts/{exynos4412-n710x-s6evr02.dts => exynos4412-n710x-s6evr02.dtsi} (100%)
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 9c727cef45df0..cf036ca1b629a 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -220,8 +220,10 @@ dtb-$(CONFIG_ARCH_EXYNOS4) += \
+ 	exynos4412-i9300.dtb \
+ 	exynos4412-i9305.dtb \
+ 	exynos4412-itop-elite.dtb \
+-	exynos4412-n710x-ea8061.dtb \
+-	exynos4412-n710x-s6evr02.dtb \
++	exynos4412-n7100-ea8061.dtb \
++	exynos4412-n7105-ea8061.dtb \
++	exynos4412-n7100-s6evr02.dtb \
++	exynos4412-n7105-s6evr02.dtb \
+ 	exynos4412-odroidu3.dtb \
+ 	exynos4412-odroidx.dtb \
+ 	exynos4412-odroidx2.dtb \
+diff --git a/arch/arm/boot/dts/exynos4412-i9305.dts b/arch/arm/boot/dts/exynos4412-i9305.dts
+index 77083f1a82731..90f57519e6cee 100644
+--- a/arch/arm/boot/dts/exynos4412-i9305.dts
++++ b/arch/arm/boot/dts/exynos4412-i9305.dts
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /dts-v1/;
+ #include "exynos4412-galaxy-s3.dtsi"
++#include "exynos4412-midas-lte.dtsi"
+ 
+ / {
+ 	model = "Samsung Galaxy S3 (GT-I9305) based on Exynos4412";
+diff --git a/arch/arm/boot/dts/exynos4412-midas-lte.dtsi b/arch/arm/boot/dts/exynos4412-midas-lte.dtsi
+new file mode 100644
+index 0000000000000..6d3512774d10a
+--- /dev/null
++++ b/arch/arm/boot/dts/exynos4412-midas-lte.dtsi
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <dt-bindings/pinctrl/samsung.h>
++
++&pinctrl_0 {
++	ap2mdm-err-fatal {
++		samsung,pins = "gpj0-1";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
++		samsung,pin-val = <0>;
++		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
++		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
++	};
++	ap2mdm-status {
++		samsung,pins = "gpf1-6";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
++		samsung,pin-val = <0>;
++		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
++		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
++	};
++	mdm2ap-hsic-pwr-active {
++		samsung,pins = "gpf2-2";
++		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
++		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
++	};
++};
++
++&pinctrl_1 {
++	mdm2ap-err-fatal {
++		samsung,pins = "gpx1-2";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
++	};
++	mdm2ap-status {
++		samsung,pins = "gpx0-5";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
++	};
++	ap2mdm-hsic-port-active {
++		samsung,pins = "gpx3-2";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++	mdm2ap-hsic-resume-req {
++		samsung,pins = "gpx0-6";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
++	};
++	ap2mdm-soft-reset-n {
++		samsung,pins = "gpl2-5";
++		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
++		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
++	};
++	ap2mdm-pmic-pwr-en {
++		samsung,pins = "gpy2-3";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
++		samsung,pin-val = <1>;
++		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
++		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV4>;
++		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
++		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
++	};
++	ap2mdm-wakeup {
++		samsung,pins = "gpm2-4";
++		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
++		samsung,pin-val = <0>;
++		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_INPUT>;
++		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_DOWN>;
++	};
++};
+diff --git a/arch/arm/boot/dts/exynos4412-midas.dtsi b/arch/arm/boot/dts/exynos4412-midas.dtsi
+index 34369a258e844..6ba276b1fc956 100644
+--- a/arch/arm/boot/dts/exynos4412-midas.dtsi
++++ b/arch/arm/boot/dts/exynos4412-midas.dtsi
+@@ -525,6 +525,16 @@ &dsi_0 {
+ 	samsung,pll-clock-frequency = <24000000>;
+ };
+ 
++&ehci {
++	samsung,vbus-gpio = <&gpf0 7 0>;
++	status = "okay";
++
++	port@1 {
++		/* HSIC0 */
++		status = "okay";
++	};
++};
++
+ &exynos_usbphy {
+ 	vbus-supply = <&esafeout1_reg>;
+ 	status = "okay";
+@@ -869,6 +879,7 @@ ldo15_reg: LDO15 {
+ 				regulator-name = "VHSIC_1.0V";
+ 				regulator-min-microvolt = <1000000>;
+ 				regulator-max-microvolt = <1000000>;
++				regulator-always-on;
+ 				regulator-state-mem {
+ 					regulator-on-in-suspend;
+ 				};
+@@ -878,6 +889,7 @@ ldo16_reg: LDO16 {
+ 				regulator-name = "VHSIC_1.8V";
+ 				regulator-min-microvolt = <1800000>;
+ 				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
+ 				regulator-state-mem {
+ 					regulator-on-in-suspend;
+ 				};
+diff --git a/arch/arm/boot/dts/exynos4412-n7100-ea8061.dts b/arch/arm/boot/dts/exynos4412-n7100-ea8061.dts
+new file mode 100644
+index 0000000000000..9de064c1dd340
+--- /dev/null
++++ b/arch/arm/boot/dts/exynos4412-n7100-ea8061.dts
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++#include "exynos4412-n710x-ea8061.dtsi"
++
++/ {
++	compatible = "samsung,n7100", "samsung,n710x", "samsung,midas", "samsung,exynos4412", "samsung,exynos4";
++	model = "Samsung Galaxy Note 2 (GT-N7100) based on Exynos4412";
++	chassis-type = "handset";
++};
+diff --git a/arch/arm/boot/dts/exynos4412-n7100-s6evr02.dts b/arch/arm/boot/dts/exynos4412-n7100-s6evr02.dts
+new file mode 100644
+index 0000000000000..5682fd01162e6
+--- /dev/null
++++ b/arch/arm/boot/dts/exynos4412-n7100-s6evr02.dts
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++#include "exynos4412-n710x-s6evr02.dtsi"
++
++/ {
++	compatible = "samsung,n7100", "samsung,n710x", "samsung,midas", "samsung,exynos4412", "samsung,exynos4";
++	model = "Samsung Galaxy Note 2 (GT-N7100) based on Exynos4412";
++	chassis-type = "handset";
++};
+diff --git a/arch/arm/boot/dts/exynos4412-n7105-ea8061.dts b/arch/arm/boot/dts/exynos4412-n7105-ea8061.dts
+new file mode 100644
+index 0000000000000..a5cf615339c32
+--- /dev/null
++++ b/arch/arm/boot/dts/exynos4412-n7105-ea8061.dts
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++#include "exynos4412-n710x-ea8061.dtsi"
++#include "exynos4412-midas-lte.dtsi"
++
++/ {
++	compatible = "samsung,n7105", "samsung,n710x", "samsung,midas", "samsung,exynos4412", "samsung,exynos4";
++	model = "Samsung Galaxy Note 2 LTE (GT-N7105) based on Exynos4412";
++	chassis-type = "handset";
++};
+diff --git a/arch/arm/boot/dts/exynos4412-n7105-s6evr02.dts b/arch/arm/boot/dts/exynos4412-n7105-s6evr02.dts
+new file mode 100644
+index 0000000000000..bc98a6c9f632c
+--- /dev/null
++++ b/arch/arm/boot/dts/exynos4412-n7105-s6evr02.dts
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++#include "exynos4412-n710x-s6evr02.dtsi"
++#include "exynos4412-midas-lte.dtsi"
++
++/ {
++	compatible = "samsung,n7105", "samsung,n710x", "samsung,midas", "samsung,exynos4412", "samsung,exynos4";
++	model = "Samsung Galaxy Note 2 LTE (GT-N7105) based on Exynos4412";
++	chassis-type = "handset";
++};
+diff --git a/arch/arm/boot/dts/exynos4412-n710x-ea8061.dts b/arch/arm/boot/dts/exynos4412-n710x-ea8061.dtsi
+similarity index 100%
+rename from arch/arm/boot/dts/exynos4412-n710x-ea8061.dts
+rename to arch/arm/boot/dts/exynos4412-n710x-ea8061.dtsi
+diff --git a/arch/arm/boot/dts/exynos4412-n710x-s6evr02.dts b/arch/arm/boot/dts/exynos4412-n710x-s6evr02.dtsi
+similarity index 100%
+rename from arch/arm/boot/dts/exynos4412-n710x-s6evr02.dts
+rename to arch/arm/boot/dts/exynos4412-n710x-s6evr02.dtsi
+diff --git a/arch/arm/boot/dts/exynos4412-n710x.dtsi b/arch/arm/boot/dts/exynos4412-n710x.dtsi
+index 5e6b941f5cb76..11d7ba676035b 100644
+--- a/arch/arm/boot/dts/exynos4412-n710x.dtsi
++++ b/arch/arm/boot/dts/exynos4412-n710x.dtsi
+@@ -4,8 +4,6 @@
+ 
+ / {
+ 	compatible = "samsung,n710x", "samsung,midas", "samsung,exynos4412", "samsung,exynos4";
+-	model = "Samsung Galaxy Note 2 (GT-N7100, GT-N7105) based on Exynos4412";
+-	chassis-type = "handset";
+ 
+ 	memory@40000000 {
+ 		device_type = "memory";
+-- 
+GitLab
+

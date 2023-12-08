@@ -1,0 +1,10 @@
+--- a/arch/arm/boot/dts/exynos4412-i9305.dts
++++ b/arch/arm/boot/dts/exynos4412-i9305.dts
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /dts-v1/;
+ #include "exynos4412-galaxy-s3.dtsi"
++#include "modem-exynos4412-m3.dtsi"
+ 
+ / {
+ 	model = "Samsung Galaxy S3 (GT-I9305) based on Exynos4412";

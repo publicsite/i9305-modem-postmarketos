@@ -45,8 +45,11 @@ putInConfig "CONFIG_USB_NET_QMI_WWAN" "arch/$anarch/configs/${thedefconfig}"
 putInConfig "CONFIG_USB_SERIAL" "arch/$anarch/configs/${thedefconfig}"
 putInConfig "CONFIG_USB_SERIAL_QUALCOMM" "arch/$anarch/configs/${thedefconfig}"
 
-#Patch by Joey Hewitt https://redmine.replicant.us/issues/2206
-	patch -p1 < $thepwd/mainline-patches/midas-dts_modem.patch
+#Configs by J05HYYY, copy our modem configs that we made from the legacy smdk4412 kernel
+	cp -a ${thepwd}/mainline-patches/modem_configs/* "arch/${anarch}/boot/dts/"
+
+#Patch by J05HYYY. Patch the i9305 dts so it enables the modem
+	patch -p1 < $thepwd/mainline-patches/exynos4412-i9305_ADD_MODEM.patch
 
 #Patch by Jack K https://redmine.replicant.us/issues/2206
 	patch -p1 < $thepwd/mainline-patches/midas_qcserial.patch

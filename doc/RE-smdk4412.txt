@@ -1,0 +1,145 @@
+Different boards ?with LTE?...
+
+arch/arm/mach-exynos/baffin-gpio.c
+arch/arm/mach-exynos/board-grande-gpio.c
+arch/arm/mach-exynos/board-iron-gpio.c
+arch/arm/mach-exynos/gc1-gpio.c
+arch/arm/mach-exynos/kona-01-gpio.c
+arch/arm/mach-exynos/kona-gpio.c
+arch/arm/mach-exynos/m3-gpio.c
+arch/arm/mach-exynos/midas-gpio.c
+arch/arm/mach-exynos/naples-gpio.c
+arch/arm/mach-exynos/p2-gpio.c
+arch/arm/mach-exynos/p4-gpio.c
+arch/arm/mach-exynos/p4note-gpio.c
+arch/arm/mach-exynos/p8-gpio.c
+arch/arm/mach-exynos/p8lte-gpio.c
+arch/arm/mach-exynos/q1-gpio.c
+arch/arm/mach-exynos/setup-mshci-gpio.c
+arch/arm/mach-exynos/setup-sdhci-gpio.c
+arch/arm/mach-exynos/t0-gpio.c
+arch/arm/mach-exynos/u1-gpio.c
+
+Different boards have different pin mappings...
+
+_____________________________________________________________
+
+pins (note see:
+https://android.googlesource.com/kernel/msm.git/+/android-msm-shamu-3.10-lollipop-mr1/Documentation/devicetree/bindings/arm/msm/mdm-modem.txt
+)
+
+                qcom,mdm2ap-errfatal-gpio = <&msmgpio 204 0x00>;
+		qcom,ap2mdm-errfatal-gpio   = <&msmgpio 277 0x00>;
+		qcom,mdm2ap-status-gpio   = <&msmgpio 198 0x00>;
+		qcom,ap2mdm-status-gpio   = <&msmgpio 66 0x00>;
+		qcom,ap2mdm-soft-reset-gpio = <&msmgpio 134 0x00>;
+		ap2mdm-pmic-pwr-gpio = <&msmgpio 153 0x00>;
+		qcom,ap2mdm-wakeup-gpio = <&msmgpio 272 0x00>;
+
+____________mdm-device.c_________________
+
+static struct resource mdm_resources[] = {
+	{
+		.start	= GPIO_MDM2AP_ERR_FATAL,	#EXYNOS4_GPX1(2)	204
+		.end	= GPIO_MDM2AP_ERR_FATAL,
+		.name	= "MDM2AP_ERRFATAL",
+		.flags	= IORESOURCE_IO,
+	},
+	{
+		.start	= GPIO_AP2MDM_ERR_FATAL,	#EXYNOS4212_GPJ0(1)	277
+		.end	= GPIO_AP2MDM_ERR_FATAL,
+		.name	= "AP2MDM_ERRFATAL",
+		.flags	= IORESOURCE_IO,
+	},
+	{
+		.start	= GPIO_MDM2AP_STATUS,		#EXYNOS4_GPX0(5)	198
+		.end	= GPIO_MDM2AP_STATUS,
+		.name	= "MDM2AP_STATUS",
+		.flags	= IORESOURCE_IO,
+	},
+	{
+		.start	= GPIO_AP2MDM_STATUS,		#EXYNOS4_GPF1(6)	66
+		.end	= GPIO_AP2MDM_STATUS,
+		.name	= "AP2MDM_STATUS",
+		.flags	= IORESOURCE_IO,
+	},
+	{
+		.start	= GPIO_AP2MDM_PON_RESET_N,	#EXYNOS4_GPL2(5) 	134
+		.end	= GPIO_AP2MDM_PON_RESET_N,
+		.name	= "AP2MDM_SOFT_RESET",
+		.flags	= IORESOURCE_IO,
+	},
+	{
+		.start	= GPIO_AP2MDM_PMIC_RESET_N,	#EXYNOS4_GPY2(3)	153
+		.end	= GPIO_AP2MDM_PMIC_RESET_N,
+		.name	= "AP2MDM_PMIC_PWR_EN",
+		.flags	= IORESOURCE_IO,
+	},
+	{
+		.start	= GPIO_AP2MDM_WAKEUP,		#EXYNOS4212_GPM2(4)	272
+		.end	= GPIO_AP2MDM_WAKEUP,
+		.name	= "AP2MDM_WAKEUP",
+		.flags	= IORESOURCE_IO,
+	},
+
+_____________________________________________________________
+
+#define EXYNOS4_GPX1(_nr)       (EXYNOS4_GPIO_X1_START + (_nr))
+#define EXYNOS4210_GPJ0(_nr)    (EXYNOS4210_GPIO_J0_START + (_nr))
+#define EXYNOS4_GPX0(_nr)       (EXYNOS4_GPIO_X0_START + (_nr))
+#define EXYNOS4_GPF1(_nr)       (EXYNOS4_GPIO_F1_START + (_nr))
+#define EXYNOS4_GPL2(_nr)       (EXYNOS4_GPIO_L2_START + (_nr))
+#define EXYNOS4_GPY2(_nr)       (EXYNOS4_GPIO_Y2_START + (_nr))
+#define EXYNOS4212_GPM2(_nr)    (EXYNOS4212_GPIO_M2_START + (_nr))
+
+
+________________________arch/arm/mach-exynos/include/mach/gpio-exynos4.h__________________
+
+#define EXYNOS4_GPIO_NEXT(__gpio) \
+        ((__gpio##_START) + (__gpio##_NR) + CONFIG_S3C_GPIO_SPACE + 1)
+
+											gpio#start-1	gpio#nr		CONFIG_S3C_GPIO_SPACE		add
+        EXYNOS4_GPIO_A0_START           = 0,					0
+        EXYNOS4_GPIO_A1_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_A0),	9	0		8			0			+1	
+        EXYNOS4_GPIO_B_START            = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_A1),	16	9		6
+        EXYNOS4_GPIO_C0_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_B),	25	16		8
+        EXYNOS4_GPIO_C1_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_C0),	31	25		5
+        EXYNOS4_GPIO_D0_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_C1),	37	31		5
+        EXYNOS4_GPIO_D1_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_D0),	42	37		4
+        EXYNOS4_GPIO_F0_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_D1),	51	42		4
+        EXYNOS4_GPIO_F1_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_F0),	60	51		8
+        EXYNOS4_GPIO_F2_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_F1),	69	60		8
+        EXYNOS4_GPIO_F3_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_F2),	76	69		8
+        EXYNOS4_GPIO_K0_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_F3),	84	76		6
+        EXYNOS4_GPIO_K1_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_K0),	92	84		7
+        EXYNOS4_GPIO_K2_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_K1),	100	92		7
+        EXYNOS4_GPIO_K3_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_K2),	108	100		7
+        EXYNOS4_GPIO_L0_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_K3),	116	108		7
+        EXYNOS4_GPIO_L1_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_L0),	125	116		8
+        EXYNOS4_GPIO_L2_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_L1),	129	125		3
+        EXYNOS4_GPIO_Y0_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_L2),	138	129		8
+        EXYNOS4_GPIO_Y1_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_Y0),	145	138		6
+        EXYNOS4_GPIO_Y2_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_Y1),	150	145		4
+        EXYNOS4_GPIO_Y3_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_Y2),	157	150		6
+        EXYNOS4_GPIO_Y4_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_Y3),	166	157		8
+        EXYNOS4_GPIO_Y5_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_Y4),	175	166		8
+        EXYNOS4_GPIO_Y6_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_Y5),	184	175		8
+        EXYNOS4_GPIO_X0_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_Y6),	193	184		8
+        EXYNOS4_GPIO_X1_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_X0),	202	193		8
+        EXYNOS4_GPIO_X2_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_X1),	211	202		8
+        EXYNOS4_GPIO_X3_START           = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_X2),	220	211		8
+        EXYNOS4_GPIO_Z_START            = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_X3),	228	220		8
+
+
+        EXYNOS4210_GPIO_E0_START        = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_Z),		236	228		7
+        EXYNOS4210_GPIO_E1_START        = EXYNOS4_GPIO_NEXT(EXYNOS4210_GPIO_E0),	242	236		5
+        EXYNOS4210_GPIO_E2_START        = EXYNOS4_GPIO_NEXT(EXYNOS4210_GPIO_E1),	251	242		8
+        EXYNOS4210_GPIO_E3_START        = EXYNOS4_GPIO_NEXT(EXYNOS4210_GPIO_E2),	258	251		6
+        EXYNOS4210_GPIO_E4_START        = EXYNOS4_GPIO_NEXT(EXYNOS4210_GPIO_E3),	267	258		8
+        EXYNOS4210_GPIO_J0_START        = EXYNOS4_GPIO_NEXT(EXYNOS4210_GPIO_E4),	276	267		8
+
+        EXYNOS4212_GPIO_J0_START        = EXYNOS4_GPIO_NEXT(EXYNOS4_GPIO_Z),		236	228		7
+        EXYNOS4212_GPIO_J1_START        = EXYNOS4_GPIO_NEXT(EXYNOS4212_GPIO_J0),	245	236		8
+        EXYNOS4212_GPIO_M0_START        = EXYNOS4_GPIO_NEXT(EXYNOS4212_GPIO_J1),	251	245		5
+        EXYNOS4212_GPIO_M1_START        = EXYNOS4_GPIO_NEXT(EXYNOS4212_GPIO_M0),	260	251		8
+        EXYNOS4212_GPIO_M2_START        = EXYNOS4_GPIO_NEXT(EXYNOS4212_GPIO_M1),	268	260		7

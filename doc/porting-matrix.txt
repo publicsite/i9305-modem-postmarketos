@@ -1,0 +1,30 @@
+PORTING MATRIX for gpio pins to modem
+
+[1]					[2]				============DEVICES [3]=========
+&pinctrl_0								m3			kona			t0			p4notepq	
+		ap2mdm-err-fatal	GPIO_AP2MDM_ERR_FATAL		EXYNOS4212_GPJ0(1)	EXYNOS4212_GPJ0(1)	EXYNOS4212_GPJ0(1)	EXYNOS4_GPC0(3)
+		ap2mdm-status		GPIO_AP2MDM_STATUS		EXYNOS4_GPF1(6)		EXYNOS4_GPF1(6)		EXYNOS4_GPF1(6)		EXYNOS4_GPL1(0)
+		mdm2ap-hsic-pwr-active	GPIO_MDM2AP_HSIC_PWR_ACTIVE	EXYNOS4_GPF2(2)		EXYNOS4_GPF2(2)		EXYNOS4_GPF2(2)		EXYNOS4_GPC0(2)
+
+&pinctrl_1
+		mdm2ap-err-fatal	GPIO_MDM2AP_ERR_FATAL		EXYNOS4_GPX1(2)		EXYNOS4_GPX1(2)		EXYNOS4_GPX1(2)		EXYNOS4_GPX1(2)
+		mdm2ap-status		GPIO_MDM2AP_STATUS		EXYNOS4_GPX0(5)		EXYNOS4_GPX0(5)		EXYNOS4_GPX0(5)		EXYNOS4_GPX2(0)
+		ap2mdm-hsic-port-active	GPIO_AP2MDM_HSIC_PORT_ACTIVE	EXYNOS4_GPX3(2)		EXYNOS4_GPX3(2)		EXYNOS4_GPX3(2)		EXYNOS4_GPX3(2)
+		mdm2ap-hsic-resume-req	GPIO_MDM2AP_HSIC_RESUME_REQ	EXYNOS4_GPX0(6)		EXYNOS4_GPX0(6)		EXYNOS4_GPX0(6)		EXYNOS4_GPX2(1)
+		ap2mdm-soft-reset-n	GPIO_AP2MDM_PON_RESET_N		EXYNOS4_GPL2(5)		EXYNOS4_GPL2(5)		EXYNOS4_GPL2(5)		EXYNOS4_GPL2(5)	
+		ap2mdm-pmic-pwr-en	GPIO_AP2MDM_PMIC_RESET_N	EXYNOS4_GPY2(3)		EXYNOS4_GPL0(0)		EXYNOS4_GPY2(3)		EXYNOS4212_GPM3(4)
+		ap2mdm-wakeup		GPIO_AP2MDM_WAKEUP		EXYNOS4212_GPM2(4)	EXYNOS4212_GPM2(4)	EXYNOS4212_GPM2(4)	EXYNOS4212_GPM2(4)
+
+
+
+
+[1] From Joey's patch
+[2] variable name in smdk4412 kernel
+[2] from arch/arm/mach-exynos/include/mach/gpio-*.h in smdk4412 kernel
+
+exynos4412-i9305.dtb			m3
+exynos4412-n7105.dtsi			t0
+exynos4412-p4note-n8010.dts		p4notepq
+lineageos_n5120_defconfig		kona
+lineageos_n5110_defconfig		kona
+lineageos_n5100_defconfig		kona

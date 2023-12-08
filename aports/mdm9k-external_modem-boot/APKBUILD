@@ -1,0 +1,30 @@
+pkgname=mdm9k-external_modem-boot
+pkgver=0.1
+pkgrel=1
+_commit="e800d784827607b37d7e91af0c8c4b94eac1db62"
+pkgdesc="Modem boot code for mdm9k modems"
+url="https://git.replicant.us/contrib/GNUtoo/tools/external_modem-boot"
+arch="all"
+license="GPLv3"
+makedepends="musl-dev libgpiod"
+source="
+	external_modem-boot-$_commit.tar.gz::https://git.replicant.us/contrib/GNUtoo/tools/external_modem-boot/snapshot/external_modem-boot-$_commit.tar.gz
+	mdm9k.initdscript
+"
+builddir="$srcdir/external_modem-boot-$_commit"
+options="!check"
+
+build() {
+	make CFLAGS="-DSKIP_MDM_DEVICE_IOCTL=1"
+}
+
+package() {
+	install -Dm755 mdm9k-boot "$pkgdir"/usr/sbin/mdm9k-boot
+	install -Dm755 mdm9k-efsd "$pkgdir"/usr/sbin/mdm9k-efsd
+	install -Dm755 "$srcdir/mdm9k.initdscript" "$pkgdir/etc/init.d/mdm9k"
+}
+
+sha512sums="
+bb2e87a5cd41a2a33fcb97589a0136964a3286476f1067eb4bee5e3b1e33fc0f6c0ea5424d88145514879c187f5ed2329d4b4d82e8dc5a3d4df7471ed736c136  external_modem-boot-e800d784827607b37d7e91af0c8c4b94eac1db62.tar.gz
+7ca0c0e2472368b01f96a9a2b6dd0c7d3442f97c61fad040ae53b88eef410462f2520a4f14691003d206442a8d4a33d2c59ea3f4e914a367ab60ad912f219e42  mdm9k.initdscript
+"

@@ -16,7 +16,7 @@ pmbootstrap init
 
 ##compile msm9k-external_modem-boot
 
-cp -a mdm9k-external_modem-boot workdir/cache_git/pmaports/modem/
+cp -a aports/mdm9k-external_modem-boot workdir/cache_git/pmaports/modem/
 
 pmbootstrap checksum mdm9k-external_modem-boot
 
@@ -24,7 +24,7 @@ pmbootstrap build --arch=armv7 mdm9k-external_modem-boot --force
 
 #install
 
-pmbootstrap install --add firmware-samsung-midas,msm-modem,msm-firmware-loader,soc-samsung-exynos4412,linux-postmarketos-exynos4,rmtfs,mdm9k-external_modem-boot
+pmbootstrap install --add firmware-samsung-midas,msm-modem,msm-firmware-loader,soc-samsung-exynos4412,linux-postmarketos-exynos4,rmtfs,libgpiod,mdm9k-external_modem-boot
 
 ##patch msm-firmware-loader.sh in the source tree
 

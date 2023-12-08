@@ -1,0 +1,2 @@
+// SPDX-License-Identifier: GPL-2.0
+#include "modem-exynos4412-kona.dtsi" //include modem
