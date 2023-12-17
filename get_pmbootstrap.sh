@@ -2,17 +2,28 @@
 
 thepwd="$PWD"
 
-#https://wiki.postmarketos.org/wiki/Installing_pmbootstrap
-#sudo apt-get install git python3 python3-setuptools
-#git clone https://gitlab.com/postmarketOS/pmbootstrap.git
-#cd pmbootstrap
-#sudo python3 setup.py install
-#cd ..
-
 sudo apt-get update
-sudo apt-get install pmbootstrap qemu-user-static heimdall-flash
+
+if [ ! -f "/usr/local/bin/pmbootstrap" ] && [ ! -f "/usr/bin/pmbootstrap" ]; then
+	##https://wiki.postmarketos.org/wiki/Installing_pmbootstrap
+	sudo apt-get install git python3 python3-setuptools
+	git clone https://gitlab.com/postmarketOS/pmbootstrap.git
+	cd pmbootstrap
+	sudo python3 setup.py install
+	cd ..
+fi
+
+sudo apt-get install qemu-user-static heimdall-flash
 
 pmbootstrap init
+
+##compile newer version of libgpiod
+
+cp -a aports/libgpiod workdir/cache_git/pmaports/main/
+
+pmbootstrap checksum libgpiod
+
+pmbootstrap build --arch=armv7 libgpiod --force
 
 ##compile msm9k-external_modem-boot
 
@@ -24,7 +35,7 @@ pmbootstrap build --arch=armv7 mdm9k-external_modem-boot --force
 
 #install
 
-pmbootstrap install --add firmware-samsung-midas,msm-modem,msm-firmware-loader,soc-samsung-exynos4412,linux-postmarketos-exynos4,rmtfs,libgpiod,mdm9k-external_modem-boot
+pmbootstrap install --add firmware-samsung-midas,msm-modem,msm-firmware-loader,soc-samsung-exynos4412,linux-postmarketos-exynos4,rmtfs,libgpiod,mdm9k-external_modem-boot,libgpiod
 
 ##patch msm-firmware-loader.sh in the source tree
 

@@ -1,0 +1,3 @@
+libgpiod is an alpine package that is old and needs to be updated/bumped upstream
+
+mdm9k-external_modem-boot is a new package from replicant.us upstream
