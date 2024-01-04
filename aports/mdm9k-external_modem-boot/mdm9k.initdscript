@@ -19,26 +19,36 @@ NAME="MDM9K"
 DESC="Start MDM9K modem"
 
 pin_name() {
-    sed 's/-/ /' /sys/firmware/devicetree/base/soc/pinctrl@*/$1/samsung,pins
+    thePin="$(cat /sys/firmware/devicetree/base/soc/pinctrl@*/$1/samsung,pins)"
+    theBankName="$(printf "%s" "$thePin" | cut -d '-' -f 1)"
+    theRelativePin="$(printf "%s" "$thePin" | cut -d '-' -f 2)"
+    theBankNumber="$(sudo gpiodetect | grep ".* \[${theBankName}\].*" | head -n 1 | cut -d ' ' -f 1)"
+    printf "%s %s" "${theBankNumber}" "${theRelativePin}"
 }
 
 start(){
-echo "Starting modem..."
-gpioset $(pin_name ap2mdm-soft-reset-n)=0
+echo "Starting modem ..."
+echo "Running gpioset $(pin_name ap2mdm-soft-reset-n)=0 ..."
+gpioset -z -c $(pin_name ap2mdm-soft-reset-n)=0
 sleep .005
-gpioset $(pin_name ap2mdm-soft-reset-n)=1
+echo "Running gpioset $(pin_name ap2mdm-soft-reset-n)=1 ..."
+gpioset -z -c $(pin_name ap2mdm-soft-reset-n)=1
 sleep .010
-gpioset $(pin_name ap2mdm-status)=1
+echo "Running gpioset $(pin_name ap2mdm-status)=1 ..."
+gpioset -z -c $(pin_name ap2mdm-status)=1
 sleep .010
 mdm9k-boot
 }
 
 stop(){
-echo "Stopping modem..."
-gpioset $(pin_name ap2mdm-status)=0
+echo "Stopping modem ..."
+echo "Running gpioset $(pin_name ap2mdm-status)=0 ..."
+gpioset -z -c $(pin_name ap2mdm-status)=0
 sleep .010
-gpioset $(pin_name ap2mdm-soft-reset-n)=1
+echo "Running gpioset $(pin_name ap2mdm-soft-reset-n)=1 ..."
+gpioset -z -c $(pin_name ap2mdm-soft-reset-n)=1
 sleep .010
-gpioset $(pin_name ap2mdm-soft-reset-n)=0
+echo "Running gpioset $(pin_name ap2mdm-soft-reset-n)=0 ..."
+gpioset -z -c $(pin_name ap2mdm-soft-reset-n)=0
 sleep .005
 }
