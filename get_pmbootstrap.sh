@@ -17,13 +17,13 @@ sudo apt-get install qemu-user-static heimdall-flash
 
 pmbootstrap init
 
-##compile newer version of libgpiod
+###compile newer version of libgpiod
 
-cp -a aports/libgpiod workdir/cache_git/pmaports/main/
+##cp -a aports/libgpiod workdir/cache_git/pmaports/main/
 
-pmbootstrap checksum libgpiod
+##pmbootstrap checksum libgpiod
 
-pmbootstrap build --arch=armv7 libgpiod --force
+##pmbootstrap build --arch=armv7 libgpiod --force
 
 ##compile msm9k-external_modem-boot
 
