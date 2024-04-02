@@ -1,0 +1,14 @@
+--- a/include/linux/time.h
++++ b/include/linux/time.h
+@@ -6,6 +6,11 @@
+ # include <linux/math64.h>
+ # include <linux/time64.h>
+ 
++struct timeval {
++	long		tv_sec;		/* seconds */
++	long		tv_usec;	/* microseconds */
++};
++
+ extern struct timezone sys_tz;
+ 
+ int get_timespec64(struct timespec64 *ts,

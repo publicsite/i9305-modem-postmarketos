@@ -1,0 +1,304 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Copyright (c) 2010-2011 Samsung Electronics Co., Ltd.
+#		http://www.samsung.com/
+
+# Configuration options for the Samsung Exynos
+
+menuconfig ARCH_EXYNOS
+	bool "Samsung Exynos"
+	depends on ARCH_MULTI_V7
+	select ARM_AMBA
+	select ARM_GIC
+	select EXYNOS_IRQ_COMBINER
+	select COMMON_CLK_SAMSUNG
+	select EXYNOS_THERMAL
+	select EXYNOS_PMU
+	select EXYNOS_SROM
+	select EXYNOS_PM_DOMAINS if PM_GENERIC_DOMAINS
+	select HAVE_ARM_ARCH_TIMER if ARCH_EXYNOS5
+	select HAVE_ARM_SCU if SMP
+	select PINCTRL
+	select PINCTRL_EXYNOS
+	select PM_GENERIC_DOMAINS if PM
+	select S5P_DEV_MFC
+	select SAMSUNG_MC
+	select SOC_SAMSUNG
+	select SRAM
+	select THERMAL
+	select THERMAL_OF
+	select MFD_SYSCON
+	select MEMORY
+	select CLKSRC_EXYNOS_MCT
+	select POWER_RESET
+	select POWER_RESET_SYSCON
+	select POWER_RESET_SYSCON_POWEROFF
+	help
+	  Support for Samsung Exynos SoCs
+
+if ARCH_EXYNOS
+
+config S5P_DEV_MFC
+	bool
+	help
+	  Compile in setup memory (init) code for MFC
+
+config ARCH_EXYNOS3
+	bool "Samsung Exynos3"
+	default y
+	select ARM_CPU_SUSPEND if PM
+	help
+	  Samsung Exynos3 (Cortex-A7) SoC based systems
+
+config ARCH_EXYNOS4
+	bool "Samsung Exynos4"
+	default y
+	select ARM_CPU_SUSPEND if PM_SLEEP
+	select CLKSRC_SAMSUNG_PWM if CPU_EXYNOS4210
+	select CPU_EXYNOS4210
+	select GIC_NON_BANKED
+	help
+	  Samsung Exynos4 (Cortex-A9) SoC based systems
+
+config ARCH_EXYNOS5
+	bool "Samsung Exynos5"
+	default y
+	help
+	  Samsung Exynos5 (Cortex-A15/A7) SoC based systems
+
+comment "Exynos SoCs"
+
+config SOC_EXYNOS3250
+	bool "Samsung Exynos3250"
+	default y
+	depends on ARCH_EXYNOS3
+
+config CPU_EXYNOS4210
+	bool "Samsung Exynos4210"
+	default y
+	depends on ARCH_EXYNOS4
+
+config SOC_EXYNOS4212
+	bool "Samsung Exynos4212"
+	default y
+	depends on ARCH_EXYNOS4
+
+config SOC_EXYNOS4412
+	bool "Samsung Exynos4412"
+	default y
+	depends on ARCH_EXYNOS4
+
+config SOC_EXYNOS5250
+	bool "Samsung Exynos5250"
+	default y
+	depends on ARCH_EXYNOS5
+
+config SOC_EXYNOS5260
+	bool "Samsung Exynos5260"
+	default y
+	depends on ARCH_EXYNOS5
+
+config SOC_EXYNOS5410
+	bool "Samsung Exynos5410"
+	default y
+	depends on ARCH_EXYNOS5
+
+config SOC_EXYNOS5420
+	bool "Samsung Exynos5420"
+	default y
+	depends on ARCH_EXYNOS5
+	select EXYNOS_MCPM if SMP
+	select ARM_CCI400_PORT_CTRL
+	select ARM_CPU_SUSPEND
+
+config SOC_EXYNOS5800
+	bool "Samsung EXYNOS5800"
+	default y
+	depends on SOC_EXYNOS5420
+	select EXYNOS_REGULATOR_COUPLER
+
+# machine support
+
+menu "EXYNOS4 Machines"
+	depends on ARCH_EXYNOS4
+
+config MACH_MIDAS
+	bool "MIDAS board"
+	select CPU_EXYNOS4212
+	select CPU_EXYNOS4412
+	select S3C_DEV_WDT
+	select S3C_DEV_RTC
+	select S3C_DEV_HSMMC2
+	select S3C_DEV_HSMMC3
+	select SAMSUNG_DEV_ADC
+	select S3C_DEV_I2C1
+	select S3C_DEV_I2C3
+	select S3C_DEV_I2C6
+	select S3C_DEV_I2C7
+	select S5P_GPIO_INT
+	select S5P_DEV_MFC
+	select S5P_DEV_FIMG2D
+	select S5P_DEV_FIMD_S5P
+	select S5P_DEV_USB_EHCI
+	select S5P_DEV_USBGADGET
+	select EXYNOS4_DEV_MSHC
+	select EXYNOS4_SETUP_MSHCI
+	select EXYNOS4_MSHC_MPLL_40MHZ
+	select EXYNOS4_MSHC_DDR
+	select EXYNOS4_MSHC_8BIT
+	select EXYNOS4_SETUP_SDHCI
+	select EXYNOS4_DEV_FIMC_LITE
+	select EXYNOS4_SETUP_FB_S5P
+	select EXYNOS4_SETUP_I2C1
+	select EXYNOS4_SETUP_I2C3
+	select EXYNOS4_SETUP_I2C4
+	select EXYNOS4_SETUP_I2C5
+	select EXYNOS4_SETUP_I2C6
+	select EXYNOS4_SETUP_I2C7
+	select EXYNOS4_SETUP_USB_PHY
+	select EXYNOS4_SETUP_MFC
+	select SAMSUNG_DEV_BACKLIGHT
+	select SAMSUNG_DEV_PWM
+	select EXYNOS_DEV_PD
+	select EXYNOS4_SETUP_MFC
+	select MIDAS_COMMON
+	help
+	  Machine support for Samsung midas board
+
+if MACH_U1 || MACH_C1 || MACH_M3 || MACH_M0 || MACH_P4 || MACH_P2 || MACH_P4NOTE || MACH_T0 || MACH_TRATS || MACH_GRANDE || MACH_GC1 || MACH_BAFFIN || MACH_KONA
+source "arch/arm/mach-exynos/Kconfig.local"
+endif
+
+config MACH_C1
+	bool "C1 board"
+	select S3C_DEV_I2C4
+	select S3C_DEV_I2C5
+	select MIDAS_COMMON_BD
+
+config MACH_M3
+	bool "C2 board"
+	select S3C_DEV_I2C4
+	select S3C_DEV_I2C5
+	select MIDAS_COMMON_BD
+
+config MACH_P4NOTE
+	bool "P4 Note board"
+	select S3C_DEV_I2C4
+	select S3C_DEV_I2C5
+	select P4NOTE_00_BD
+
+config MACH_T0
+	bool "T0 board"
+	select EXYNOS4_SETUP_I2C2
+	select S3C_DEV_I2C2
+	select S3C_DEV_I2C4
+	select S3C_DEV_I2C5
+
+config MACH_KONA
+        bool "KONA Note8 board"
+        select S3C_DEV_I2C4
+        select S3C_DEV_I2C5
+
+config MIDAS_COMMON_BD
+	bool "Midas default common Board"
+
+config P4NOTE_00_BD
+	bool "P4 Note PQ common Board"
+
+endmenu
+
+if SEC_MODEM
+comment "Samsung Modem Feature"
+
+config LTE_VIA_SWITCH
+	bool
+	default n
+
+config SEC_MODEM_M1
+	bool "M1 with cmc221"
+	select LTE_MODEM_CMC221
+	select LINK_DEVICE_DPRAM
+	select LINK_DEVICE_USB
+	select USBHUB_USB3503
+	select EHCI_IRQ_DISTRIBUTION
+
+config SEC_MODEM_C1
+	bool "C1 with cmc221"
+	select LTE_MODEM_CMC221
+	select LINK_DEVICE_DPRAM
+	select LINK_DEVICE_USB
+	select USBHUB_USB3503
+	select EHCI_IRQ_DISTRIBUTION
+
+config SEC_MODEM_C1_LGT
+	bool "C1 with CMC221 and CBP7.2"
+	select CDMA_MODEM_CBP72
+	select LTE_MODEM_CMC221
+	select LTE_VIA_SWITCH
+	select LINK_DEVICE_DPRAM
+	select LINK_DEVICE_USB
+	select USBHUB_USB3503
+	select EHCI_IRQ_DISTRIBUTION
+
+config SEC_MODEM_GAIA
+	bool "GAIA with cmc221"
+	select LTE_MODEM_CMC221
+	select LINK_DEVICE_DPRAM
+
+config SEC_MODEM_P8LTE
+	bool "P8 VZW with CMC220 and CBP7.1"
+	select CDMA_MODEM_CBP71
+	select LINK_DEVICE_DPRAM
+	select LTE_MODEM_CMC220
+	select LINK_DEVICE_USB
+	select INTERNAL_MODEM_IF
+
+endif
+
+comment "Qualcomm Modem Feature"
+config QC_MODEM
+	bool "Qualcomm modem support"
+	default n
+
+config MSM_SUBSYSTEM_RESTART
+	bool "QC Modem restart handler"
+	default n
+
+config QC_MODEM_MDM9X15
+	bool "support QC mdm9x15 modem"
+	default n
+
+config MDM_HSIC_PM
+	bool "support QC mdm9x15 PM over HSIC"
+	default n
+
+if QC_MODEM
+choice
+	prompt "QC MODEM CONFIG"
+	depends on QC_MODEM
+	default QC_MODEM_M3
+
+config QC_MODEM_M3
+	bool "M3 support QMI interface over HSIC"
+	select MODEM_SUPPORT_QMI_INTERFACE
+	select MSM_SUBSYSTEM_RESTART
+	select USB_QCOM_DIAG_BRIDGE
+	select USB_QCOM_MDM_BRIDGE
+	select QC_MODEM_MDM9X15
+	select USB_NET_QMI_WWAN
+	select DIAG_CHAR
+	select MDM_HSIC_PM
+
+endchoice
+endif
+
+config EXYNOS_MCPM
+	bool
+	select MCPM
+
+config EXYNOS_CPU_SUSPEND
+	bool
+	select ARM_CPU_SUSPEND
+	default PM_SLEEP || ARM_EXYNOS_CPUIDLE
+
+endif

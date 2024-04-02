@@ -1,0 +1,11 @@
+--- a/arch/arm/include/asm/thread_info.h
++++ b/arch/arm/include/asm/thread_info.h
+@@ -42,6 +42,8 @@
+ #include <asm/types.h>
+ #include <asm/traps.h>
+ 
++typedef unsigned long mm_segment_t;
++
+ struct cpu_context_save {
+ 	__u32	r4;
+ 	__u32	r5;

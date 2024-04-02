@@ -1,5 +1,5 @@
---- a/arch/arm/boot/dts/exynos4412-i9305.dts
-+++ b/arch/arm/boot/dts/exynos4412-i9305.dts
+--- a/arch/arm/boot/dts/samsung/exynos4412-i9305.dts
++++ b/arch/arm/boot/dts/samsung/exynos4412-i9305.dts
 @@ -1,6 +1,7 @@
  // SPDX-License-Identifier: GPL-2.0
  /dts-v1/;

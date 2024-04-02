@@ -4,13 +4,13 @@ Date: Thu, 5 Apr 2018 21:20:33 +1000
 Subject: ARM: dts: EXYNOS: enable HSIC0 on midas boards
 
 ---
- arch/arm/boot/dts/exynos4412-midas.dtsi | 12 ++++++++++++
+ arch/arm/boot/dts/samsung/exynos4412-midas.dtsi | 12 ++++++++++++
  1 file changed, 12 insertions(+)
 
-diff --git a/arch/arm/boot/dts/exynos4412-midas.dtsi b/arch/arm/boot/dts/exynos4412-midas.dtsi
+diff --git a/arch/arm/boot/dts/samsung/exynos4412-midas.dtsi b/arch/arm/boot/dts/samsung/exynos4412-midas.dtsi
 index 7a95e7365fcb..357ee8d82d10 100644
---- a/arch/arm/boot/dts/exynos4412-midas.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-midas.dtsi
+--- a/arch/arm/boot/dts/samsung/exynos4412-midas.dtsi
++++ b/arch/arm/boot/dts/samsung/exynos4412-midas.dtsi
 @@ -451,6 +451,16 @@
  	samsung,pll-clock-frequency = <24000000>;
  };

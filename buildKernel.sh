@@ -37,13 +37,13 @@ cp -a $thepwd/postmarketConfigs/${1}/init ./usr/
 
 cp -p arch/${anarch}/configs/${thedefconfig} .config
 
-make olddefconfig
+make olddefconfig KCFLAGS="-Wno-error=unused-function"
 
-make zImage
+make zImage KCFLAGS="-Wno-error=unused-function"
 
-make exynos4412-i9305.dtb
+make samsung/exynos4412-i9305.dtb KFLAGS="-Wno-error=unused-function"
 
-cat arch/${anarch}/boot/zImage arch/${anarch}/boot/dts/exynos4412-i9305.dtb > ${thepwd}/zImage
+cat arch/${anarch}/boot/zImage arch/${anarch}/boot/dts/samsung/exynos4412-i9305.dtb > ${thepwd}/zImage
 
 export ARCH="${oldARCH}"
 export CROSS_COMPILE="${oldCROSS_COMPILE}"

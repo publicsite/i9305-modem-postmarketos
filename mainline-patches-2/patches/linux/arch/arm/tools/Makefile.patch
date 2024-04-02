@@ -1,0 +1,14 @@
+--- a/arch/arm/tools/Makefile
++++ b/arch/arm/tools/Makefile
+@@ -28,6 +28,11 @@
+ 
+ uapi:	$(uapi-hdrs-y)
+ 
++include/generated/mach-types.h: $(src)/gen-mach-types $(src)/mach-types
++	@echo '  Generating $@'
++	@mkdir -p $(dir $@)
++	$(Q)$(AWK) -f $^ > $@ || { rm -f $@; /bin/false; }
++
+ # Create output directory if not already present
+ $(shell mkdir -p $(kapi) $(uapi))
+ 

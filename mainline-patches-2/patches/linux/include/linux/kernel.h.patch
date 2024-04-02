@@ -1,0 +1,55 @@
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -197,6 +197,8 @@
+ static inline void might_fault(void) { }
+ #endif
+ 
++extern struct atomic_notifier_head panic_notifier_list;
++
+ void do_exit(long error_code) __noreturn;
+ 
+ extern int get_option(char **str, int *pint);
+@@ -216,6 +218,43 @@
+ 
+ extern bool early_boot_irqs_disabled;
+ 
++
++/* Internal, do not use. */
++int __must_check _kstrtoul(const char *s, unsigned int base, unsigned long *res);
++int __must_check _kstrtol(const char *s, unsigned int base, long *res);
++
++int __must_check kstrtoull(const char *s, unsigned int base, unsigned long long *res);
++int __must_check kstrtoll(const char *s, unsigned int base, long long *res);
++
++int __must_check kstrtouint(const char *s, unsigned int base, unsigned int *res);
++int __must_check kstrtoint(const char *s, unsigned int base, int *res);
++
++int __must_check kstrtou16(const char *s, unsigned int base, u16 *res);
++int __must_check kstrtos16(const char *s, unsigned int base, s16 *res);
++int __must_check kstrtou8(const char *s, unsigned int base, u8 *res);
++int __must_check kstrtos8(const char *s, unsigned int base, s8 *res);
++
++int __must_check kstrtoull_from_user(const char __user *s, size_t count, unsigned int base, unsigned long long *res);
++int __must_check kstrtoll_from_user(const char __user *s, size_t count, unsigned int base, long long *res);
++int __must_check kstrtoul_from_user(const char __user *s, size_t count, unsigned int base, unsigned long *res);
++int __must_check kstrtol_from_user(const char __user *s, size_t count, unsigned int base, long *res);
++int __must_check kstrtouint_from_user(const char __user *s, size_t count, unsigned int base, unsigned int *res);
++int __must_check kstrtoint_from_user(const char __user *s, size_t count, unsigned int base, int *res);
++int __must_check kstrtou16_from_user(const char __user *s, size_t count, unsigned int base, u16 *res);
++int __must_check kstrtos16_from_user(const char __user *s, size_t count, unsigned int base, s16 *res);
++int __must_check kstrtou8_from_user(const char __user *s, size_t count, unsigned int base, u8 *res);
++int __must_check kstrtos8_from_user(const char __user *s, size_t count, unsigned int base, s8 *res);
++
++extern unsigned long simple_strtoul(const char *,char **,unsigned int);
++extern long simple_strtol(const char *,char **,unsigned int);
++extern unsigned long long simple_strtoull(const char *,char **,unsigned int);
++extern long long simple_strtoll(const char *,char **,unsigned int);
++#define strict_strtoul	kstrtoul
++#define strict_strtol	kstrtol
++#define strict_strtoull	kstrtoull
++#define strict_strtoll	kstrtoll
++
++
+ /*
+  * Values used for system_state. Ordering of the states must not be changed
+  * as code checks for <, <=, >, >= STATE.

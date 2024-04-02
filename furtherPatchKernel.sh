@@ -1,40 +1,54 @@
+#!/bin/sh
 putInConfig(){
 if [ "${3}" = "" ]; then 
-	theresult="y"
+	theresult="=y"
 else
 	theresult="${3}"
 fi
 	if [ "$(grep "^${1}=n" ${2})" != "" ]; then
-		sed -i "s/${1}=n/${1}=${theresult}/g" ${2}
+		sed -i "s/${1}=n/${1}${theresult}/g" ${2}
 	elif [ "$(grep "^# ${1} is not set" ${2})" != "" ]; then
-		sed -i "s/# ${1} is not set/${1}=${theresult}/g" "${2}"
+		sed -i "s/# ${1} is not set/${1}${theresult}/g" "${2}"
 	elif [ "$(grep "^${1}=m" ${2})" != "" ]; then
-		sed -i "s/${1}=m/${1}=${theresult}/g" "${2}"
-	elif [ "$(grep "^${1}=${theresult}" ${2})" = "" ]; then
-		echo "${1}=${theresult}" >> "${2}"
+		sed -i "s/${1}=m/${1}${theresult}/g" "${2}"
+	elif [ "$(grep "^${1}${theresult}" ${2})" = "" ]; then
+		echo "${1}${theresult}" >> "${2}"
 	fi
 }
-
 
 takeFromConfig(){
-	if [ "$(grep "^${1}=y" ${2})" != "" ]; then
-		sed -i "s/${1}=y/${1}=n/g" ${2}
-	elif [ "$(grep "^# ${1} is not set" ${2})" != "" ]; then
-		sed -i "s/# ${1} is not set/${1}=n/g" "${2}"
-	elif [ "$(grep "^${1}=m" ${2})" != "" ]; then
-		sed -i "s/${1}=n/${1}=y/g" "${2}"
-	elif [ "$(grep "^${1}=n" ${2})" = "" ]; then
-		echo "${1}=n" >> "${2}"
+	if [ "${3}" = "" ]; then 
+		theresult="=n"
+		if [ "$(grep "^${1}=y" ${2})" != "" ]; then
+			sed -i "s/${1}=y/${1}${theresult}/g" ${2}
+		elif [ "$(grep "^# ${1} is not set" ${2})" != "" ]; then
+			sed -i "s/# ${1} is not set/${1}${theresult}/g" "${2}"
+		elif [ "$(grep "^${1}=m" ${2})" != "" ]; then
+			sed -i "s/${1}=m/${1}${theresult}/g" "${2}"
+		elif [ "$(grep "^${1}=n" ${2})" = "" ]; then
+			echo "${1}=n" >> "${2}"
+		fi
+	elif [ "${3}" = " is not set" ]; then
+		theresult=" is not set"
+		if [ "$(grep "^${1}=y" ${2})" != "" ]; then
+			sed -i "s/${1}=y/# ${1}${theresult}/g" ${2}
+		elif [ "$(grep "^${1}=n" ${2})" != "" ]; then
+			sed -i "s/${1}=n/# ${1}${theresult}/g" "${2}"
+		elif [ "$(grep "^${1}=m" ${2})" != "" ]; then
+			sed -i "s/${1}=m/# ${1}${theresult}/g" "${2}"
+		elif [ "$(grep "^${1}=n" ${2})" = "" ]; then
+			echo "# ${1}${theresult}" >> "${2}"
+		fi
 	fi
 }
-
-
 
 thepwd="$PWD"
 
 anarch="$2"
 
-cd kernelArchives/linux-*/linux-*
+linuxdir="$(find "$thepwd/kernelArchives" -maxdepth 2 -mindepth 2 -type d -name "linux-*")"
+
+cd "${linuxdir}"
 
 cp -a $thepwd/postmarketConfigs/${1}/config-$(echo ${1} | cut -d - -f 2-3).* arch/${anarch}/configs/
 
@@ -46,7 +60,7 @@ putInConfig "CONFIG_USB_SERIAL" "arch/$anarch/configs/${thedefconfig}"
 putInConfig "CONFIG_USB_SERIAL_QUALCOMM" "arch/$anarch/configs/${thedefconfig}"
 
 #Configs by J05HYYY, copy our modem configs that we made from the legacy smdk4412 kernel
-	cp -a ${thepwd}/mainline-patches/modem_configs/* "arch/${anarch}/boot/dts/"
+	cp -a ${thepwd}/mainline-patches/modem_configs/* "arch/${anarch}/boot/dts/samsung"
 
 #Patch by J05HYYY. Patch the i9305 dts so it enables the modem
 	patch -p1 < $thepwd/mainline-patches/exynos4412-i9305_ADD_MODEM.patch
@@ -71,3 +85,4 @@ putInConfig "CONFIG_USB_SERIAL_QUALCOMM" "arch/$anarch/configs/${thedefconfig}"
 	patch -p1 < $thepwd/mainline-patches/net_usb_add_Samsung_IPC-over-HSIC_driver_2of2.patch
 
 ##takeFromConfig "CONFIG_DEVKMEM" "arch/$anarch/configs/${thedefconfig}"
+

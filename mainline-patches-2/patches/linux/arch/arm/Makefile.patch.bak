@@ -1,0 +1,10 @@
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -284,6 +284,7 @@
+ 
+ archprepare:
+ 	$(Q)$(MAKE) $(build)=arch/arm/tools kapi
++	$(Q)$(MAKE) $(build)=arch/arm/tools include/generated/mach-types.h
+ 
+ # Convert bzImage to zImage
+ bzImage: zImage

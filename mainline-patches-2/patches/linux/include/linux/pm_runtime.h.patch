@@ -1,0 +1,23 @@
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -94,6 +94,12 @@
+ 
+ extern int devm_pm_runtime_enable(struct device *dev);
+ 
++static inline bool pm_children_suspended(struct device *dev)
++{
++	return dev->power.ignore_children
++		|| !atomic_read(&dev->power.child_count);
++}
++
+ /**
+  * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
+  * @dev: Target device.
+@@ -290,6 +296,7 @@
+ 
+ static inline int devm_pm_runtime_enable(struct device *dev) { return 0; }
+ 
++static inline bool pm_children_suspended(struct device *dev) { return false; }
+ static inline void pm_suspend_ignore_children(struct device *dev, bool enable) {}
+ static inline void pm_runtime_get_noresume(struct device *dev) {}
+ static inline void pm_runtime_put_noidle(struct device *dev) {}

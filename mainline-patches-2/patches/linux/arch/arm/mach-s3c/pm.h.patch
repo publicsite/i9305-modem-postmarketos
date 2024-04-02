@@ -1,0 +1,11 @@
+--- a/arch/arm/mach-s3c/pm.h
++++ b/arch/arm/mach-s3c/pm.h
+@@ -15,7 +15,7 @@
+ 
+ struct device;
+ 
+-#ifdef CONFIG_SAMSUNG_PM
++#ifdef CONFIG_PM
+ 
+ extern __init int s3c_pm_init(void);
+ extern __init int s3c64xx_pm_init(void);

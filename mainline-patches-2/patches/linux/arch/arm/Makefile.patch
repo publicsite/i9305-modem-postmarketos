@@ -1,0 +1,58 @@
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -227,23 +227,44 @@
+ machine-$(CONFIG_PLAT_VERSATILE)	+= versatile
+ machine-$(CONFIG_PLAT_SPEAR)		+= spear
+ 
++plat-$(CONFIG_ARCH_S3C64XX)	:= samsung
++plat-$(CONFIG_PLAT_S3C24XX)	:= s3c24xx samsung
++plat-$(CONFIG_PLAT_S5P)		:= s5p samsung
++
+ # legacy platforms provide their own mach/*.h headers globally,
+ # these three are mutually exclusive
+ machdirs-$(CONFIG_ARCH_FOOTBRIDGE)	+= arch/arm/mach-footbridge
+ machdirs-$(CONFIG_ARCH_RPC)		+= arch/arm/mach-rpc
+ machdirs-$(CONFIG_ARCH_SA1100)		+= arch/arm/mach-sa1100
+ KBUILD_CPPFLAGS += $(patsubst %,-I$(srctree)/%/include,$(machdirs-y))
++KBUILD_CPPFLAGS += $(patsubst %,-I$(srctree)/%/include,$(plat-y))
+ 
+ # The byte offset of the kernel image in RAM from the start of RAM.
+ TEXT_OFFSET := $(textofs-y)
+ 
++# The first directory contains additional information for the boot setup code
++ifneq ($(machine-y),)
++MACHINE  := arch/arm/mach-$(word 1,$(machine-y))/
++else
++MACHINE  :=
++endif
++
++machdirs := $(patsubst %,arch/arm/mach-%/,$(machine-y))
++platdirs := $(patsubst %,arch/arm/plat-%/,$(plat-y))
++
++ifeq ($(KBUILD_SRC),)
++KBUILD_CPPFLAGS += $(patsubst %,-I%include,$(machdirs)) $(patsubst %,-I%include,$(platdirs))
++else
++KBUILD_CPPFLAGS += $(patsubst %,-I$(srctree)/%include,$(machdirs)) $(patsubst %,-I$(srctree)/%include,$(platdirs))
++endif
++
+ export	TEXT_OFFSET GZFLAGS MMUEXT
+ 
+ # If we have a machine-specific directory, then include it in the build.
+-core-y				+= $(patsubst %,arch/arm/mach-%/,$(machine-y))
+-# For cleaning
+-core-				+= $(patsubst %,arch/arm/mach-%/,$(machine-))
++core-y				+= $(patsubst %,arch/arm/mach-%/,$(machine-y)) $(patsubst %,arch/arm/plat-%/,$(plat-y))
+ 
++# For cleaning
++core-				+= $(patsubst %,arch/arm/mach-%/,$(machine-)) $(patsubst %,arch/arm/plat-%/,$(plat-))
+ core-$(CONFIG_PLAT_ORION)	+= arch/arm/plat-orion/
+ 
+ libs-y				:= arch/arm/lib/ $(libs-y)
+@@ -284,6 +305,7 @@
+ 
+ archprepare:
+ 	$(Q)$(MAKE) $(build)=arch/arm/tools kapi
++	$(Q)$(MAKE) $(build)=arch/arm/tools include/generated/mach-types.h
+ 
+ # Convert bzImage to zImage
+ bzImage: zImage

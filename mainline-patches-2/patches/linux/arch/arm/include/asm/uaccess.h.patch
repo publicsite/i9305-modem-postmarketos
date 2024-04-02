@@ -1,0 +1,47 @@
+--- a/arch/arm/include/asm/uaccess.h
++++ b/arch/arm/include/asm/uaccess.h
+@@ -54,8 +54,23 @@
+ extern int __get_user_bad(void);
+ extern int __put_user_bad(void);
+ 
++/*
++ * Note that this is actually 0x1,0000,0000
++ */
++#define KERNEL_DS	0x00000000
++#define get_ds()	(KERNEL_DS)
++
+ #ifdef CONFIG_MMU
+ 
++#define USER_DS		TASK_SIZE
++#define get_fs()	(current_thread_info()->cpu)
++
++static inline void set_fs(mm_segment_t fs)
++{
++	current_thread_info()->cpu = fs;
++	modify_domain(DOMAIN_KERNEL, fs ? DOMAIN_CLIENT : DOMAIN_MANAGER);
++}
++
+ /*
+  * This is a type: either unsigned long, if the argument fits into
+  * that type, or otherwise unsigned long long.
+@@ -217,6 +232,20 @@
+ 
+ #else /* CONFIG_MMU */
+ 
++/*
++ * uClinux has only one addr space, so has simplified address limits.
++ */
++#define USER_DS			KERNEL_DS
++
++#define segment_eq(a,b)		(1)
++#define __addr_ok(addr)		(1)
++#define __range_ok(addr,size)	(0)
++#define get_fs()		(KERNEL_DS)
++
++static inline void set_fs(mm_segment_t fs)
++{
++}
++
+ #define get_user(x, p)	__get_user(x, p)
+ #define __put_user_check __put_user_nocheck
+ 

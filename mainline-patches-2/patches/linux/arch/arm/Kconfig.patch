@@ -1,0 +1,48 @@
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -418,6 +418,23 @@
+ 	help
+ 	  Support for Airoha EN7523 SoCs
+ 
++config ARCH_EXYNOS
++	bool "Samsung EXYNOS"
++	select CPU_V7
++	select ARCH_FLATMEM_ENABLE
++	select GENERIC_GPIO
++	select HAVE_CLK
++	select CLKDEV_LOOKUP
++	select ARCH_HAS_CPUFREQ
++	select GENERIC_CLOCKEVENTS
++	select HAVE_S3C_RTC if RTC_CLASS
++	select HAVE_S3C2410_I2C if I2C
++	select HAVE_S3C2410_WATCHDOG if WATCHDOG
++	select ARCH_HAS_OPP
++	select PM_OPP if PM
++	help
++	  Samsung EXYNOS series based systems
++
+ #
+ # This is sorted alphabetically by mach-* pathname.  However, plat-*
+ # Kconfigs may be included either alphabetically (according to the
+@@ -519,6 +536,9 @@
+ 
+ source "arch/arm/mach-sa1100/Kconfig"
+ 
++source "arch/arm/plat-samsung/Kconfig"
++source "arch/arm/plat-s5p/Kconfig"
++
+ source "arch/arm/mach-shmobile/Kconfig"
+ 
+ source "arch/arm/mach-socfpga/Kconfig"
+@@ -588,6 +608,11 @@
+ 
+ source "arch/arm/mm/Kconfig"
+ 
++config ARM_PLD_SIZE
++	int
++	default 64 if ARCH_EXYNOS5
++	default 32
++
+ config IWMMXT
+ 	bool "Enable iWMMXt support"
+ 	depends on CPU_XSCALE || CPU_XSC3 || CPU_MOHAWK || CPU_PJ4 || CPU_PJ4B

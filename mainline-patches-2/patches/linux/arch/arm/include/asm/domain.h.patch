@@ -1,0 +1,32 @@
+--- a/arch/arm/include/asm/domain.h
++++ b/arch/arm/include/asm/domain.h
+@@ -112,6 +112,29 @@
+ }
+ #endif
+ 
++#ifdef CONFIG_CPU_USE_DOMAINS
++#define set_domain(x)					\
++	do {						\
++	__asm__ __volatile__(				\
++	"mcr	p15, 0, %0, c3, c0	@ set domain"	\
++	  : : "r" (x));					\
++	isb();						\
++	} while (0)
++
++#define modify_domain(dom,type)					\
++	do {							\
++	struct thread_info *thread = current_thread_info();	\
++	unsigned int domain = thread->cpu_domain;		\
++	domain &= ~domain_val(dom, DOMAIN_MANAGER);		\
++	thread->cpu_domain = domain | domain_val(dom, type);	\
++	set_domain(thread->cpu_domain);				\
++	} while (0)
++
++#else
++#define set_domain(x)		do { } while (0)
++#define modify_domain(dom,type)	do { } while (0)
++#endif
++
+ /*
+  * Generate the T (user) versions of the LDR/STR and related
+  * instructions (inline assembly)
