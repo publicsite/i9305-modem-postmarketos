@@ -58,6 +58,57 @@ thedefconfig="$(basename $(find arch/${anarch}/configs -name "config-$(echo ${1}
 putInConfig "CONFIG_USB_NET_QMI_WWAN" "arch/$anarch/configs/${thedefconfig}"
 putInConfig "CONFIG_USB_SERIAL" "arch/$anarch/configs/${thedefconfig}"
 putInConfig "CONFIG_USB_SERIAL_QUALCOMM" "arch/$anarch/configs/${thedefconfig}"
+putInConfig "CONFIG_USB_WDM" "arch/$anarch/configs/${thedefconfig}"
+putInConfig "CONFIG_QC_MODEM" "arch/$anarch/configs/${thedefconfig}"
+putInConfig "CONFIG_QC_MODEM_M3" "arch/$anarch/configs/${thedefconfig}"
+
+			#make kernel smaller by merging with tinylinux config https://elinux.org/Kernel_Size_Tuning_Guide
+
+			putInConfig "CONFIG_CORE_SMALL" "arch/$anarch/configs/${thedefconfig}"
+			putInConfig "CONFIG_NET_SMALL" "arch/$anarch/configs/${thedefconfig}"
+			putInConfig "CONFIG_KMALLOC_ACCOUNTING" "arch/$anarch/configs/${thedefconfig}"
+			putInConfig "CONFIG_AUDIT_BOOTMEM" "arch/$anarch/configs/${thedefconfig}"
+			putInConfig "CONFIG_DEPRECATE_INLINES" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_PRINTK" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_BUG" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_ELF_CORE" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_PROC_KCORE" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_AIO" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_XATTR" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_FILE_LOCKING" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_DIRECTIO" "arch/$anarch/configs/${thedefconfig}"
+
+			takeFromConfig "CONFIG_KALLSYMS" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_SHMEM" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_SYSV_IPC" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_POSIX_MQUEUE" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_SYSCTL" "arch/$anarch/configs/${thedefconfig}"
+
+			putInConfig "CONFIG_CC_OPTIMIZE_FOR_SIZE" "arch/$anarch/configs/${thedefconfig}"
+			putInConfig "CONFIG_IOSCHED_AS" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_IOSCHED_CFQ" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_IDE" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_SCSI" "arch/$anarch/configs/${thedefconfig}"
+
+			putInConfig "CONFIG_OPTIMIZE_INLINING" "arch/$anarch/configs/${thedefconfig}"
+			putInConfig "CONFIG_SLOB" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_SLAB" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_SLUB" "arch/$anarch/configs/${thedefconfig}"
+
+			#use XZ compression to make image even smaller
+			takeFromConfig "CONFIG_INITRAMFS_COMPRESSION_GZIP" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_INITRAMFS_COMPRESSION_BZIP2" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_INITRAMFS_COMPRESSION_LZO" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_INITRAMFS_COMPRESSION_LZ4" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_INITRAMFS_COMPRESSION_ZSTD" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_INITRAMFS_COMPRESSION_NONE" "arch/$anarch/configs/${thedefconfig}"
+			putInConfig "CONFIG_INITRAMFS_COMPRESSION_XZ" "arch/$anarch/configs/${thedefconfig}"
+
+			takeFromConfig "CONFIG_KERNEL_GZIP" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_KERNEL_LZMA" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_KERNEL_LZO" "arch/$anarch/configs/${thedefconfig}"
+			takeFromConfig "CONFIG_KERNEL_LZ4" "arch/$anarch/configs/${thedefconfig}"
+			putInConfig "CONFIG_KERNEL_XZ" "arch/$anarch/configs/${thedefconfig}"
 
 #Configs by J05HYYY, copy our modem configs that we made from the legacy smdk4412 kernel
 	cp -a ${thepwd}/mainline-patches/modem_configs/* "arch/${anarch}/boot/dts/samsung"
@@ -84,5 +135,10 @@ putInConfig "CONFIG_USB_SERIAL_QUALCOMM" "arch/$anarch/configs/${thedefconfig}"
 	patch -p1 < $thepwd/mainline-patches/net_usb_add_Samsung_IPC-over-HSIC_driver_1of2.patch
 	patch -p1 < $thepwd/mainline-patches/net_usb_add_Samsung_IPC-over-HSIC_driver_2of2.patch
 
-##takeFromConfig "CONFIG_DEVKMEM" "arch/$anarch/configs/${thedefconfig}"
+#===wwan patches===
 
+#author	Wolfgang Wiedmeyer, committer	Joey Hewitt, https://git.replicant.us/contrib/scintill/kernel_samsung_smdk4412/commit/?h=replicant-6.0&id=1d4e4dd443678632b1462ae68f63e4749611d549
+	patch -p1 < "${thepwd}/mainline-patches/drivers-Backport_cdc-wdm_and_new_qmi_wwan.patch"
+
+#patch by J05HYYY, include m3 modem in Kconfig
+	patch -p1 < "${thepwd}/mainline-patches/include-m3-modem-in-Kconfig.patch"

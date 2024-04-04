@@ -1,0 +1,31 @@
+--- a/arch/arm/mach-exynos/Kconfig
++++ b/arch/arm/mach-exynos/Kconfig
+@@ -127,3 +127,28 @@
+ 	default PM_SLEEP || ARM_EXYNOS_CPUIDLE
+ 
+ endif
++
++comment "Qualcomm Modem Feature"
++config QC_MODEM
++	bool "Qualcomm modem support"
++	default n
++
++if QC_MODEM
++choice
++	prompt "QC MODEM CONFIG"
++	depends on QC_MODEM
++	default QC_MODEM_M3
++
++config QC_MODEM_M3
++	bool "M3 support QMI interface over HSIC"
++	select MODEM_SUPPORT_QMI_INTERFACE
++	select MSM_SUBSYSTEM_RESTART
++	select USB_QCOM_DIAG_BRIDGE
++	select USB_QCOM_MDM_BRIDGE
++	select QC_MODEM_MDM9X15
++	select USB_NET_QMI_WWAN
++	select DIAG_CHAR
++	select MDM_HSIC_PM
++
++endchoice
++endif
