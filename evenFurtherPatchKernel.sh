@@ -100,7 +100,6 @@ cd "${linuxdir}/include"
 ln -s asm-generic asm
 cd "${linuxdir}"
 patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/arch/arm/mach-exynos/Makefile.patch"
-patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/arch/arm/mach-s3c/pm.h.patch"
 patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/arch/arm/mach-exynos/Kconfig.patch"
 patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/arch/arm/Kconfig.patch"
 patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/arch/arm/Makefile.patch"
@@ -114,13 +113,18 @@ patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/arch/arm/include/asm/dom
 patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/include/linux/time.h.patch"
 patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/include/linux/interrupt.h.patch"
 patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/include/linux/pm_runtime.h.patch"
+patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/drivers/Kconfig.patch"
+patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/drivers/Makefile.patch"
+patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/drivers/char/Makefile.patch"
+patch -p1 < "${thepwd}/mainline-patches-2/patches/linux/drivers/char/Kconfig.patch"
+cp -a "${thepwd}/mainline-patches-2/patches/linux/include/linux/mdm_hsic_pm.h" "${linuxdir}/include/linux/"
 cp -a "${thepwd}/mainline-patches-2/patches/linux/include/asm-generic/gpio.h" "${linuxdir}/include/asm-generic/"
 cp -a "${thepwd}/mainline-patches-2/patches/linux/arch/arm/mach-exynos/Kconfig.local" "${linuxdir}/arch/arm/mach-exynos/"
 cp -a "${thepwd}/mainline-patches-2/patches/linux/arch/arm/mach-exynos/mdm_common.c" "${linuxdir}/arch/arm/mach-exynos/"
-cp -a "${thepwd}/mainline-patches-2/patches/linux/arch/arm/mach-exynos/mdm_hsic_pm.c" "${linuxdir}/arch/arm/mach-exynos/"
-cp -a "${thepwd}/mainline-patches-2/patches/linux/arch/arm/mach-exynos/mdm2.c" "${linuxdir}/arch/arm/mach-exynos/mdm2.c"
+
 cp -a "${thepwd}/mainline-patches-2/patches/linux/arch/arm/plat-samsung/Kconfig" "${linuxdir}/arch/arm/plat-samsung/"
 cp -a "${thepwd}/mainline-patches-2/patches/linux/arch/arm/plat-s5p/Kconfig" "${linuxdir}/arch/arm/plat-s5p/"
+cp -a "${thepwd}/mainline-patches-2/patches/linux/drivers/char/diag/Makefile" "${linuxdir}/drivers/char/diag/"
 
 #add the modem to linux config
 

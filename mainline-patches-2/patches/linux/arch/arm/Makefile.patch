@@ -1,6 +1,14 @@
 --- a/arch/arm/Makefile
 +++ b/arch/arm/Makefile
-@@ -227,23 +227,44 @@
+@@ -211,7 +211,6 @@
+ machine-$(CONFIG_ARCH_REALTEK)		+= realtek
+ machine-$(CONFIG_ARCH_ROCKCHIP)		+= rockchip
+ machine-$(CONFIG_ARCH_RPC)		+= rpc
+-machine-$(CONFIG_PLAT_SAMSUNG)		+= s3c
+ machine-$(CONFIG_ARCH_S5PV210)		+= s5pv210
+ machine-$(CONFIG_ARCH_SA1100)		+= sa1100
+ machine-$(CONFIG_ARCH_RENESAS)	 	+= shmobile
+@@ -227,23 +226,44 @@
  machine-$(CONFIG_PLAT_VERSATILE)	+= versatile
  machine-$(CONFIG_PLAT_SPEAR)		+= spear
  
@@ -48,7 +56,7 @@
  core-$(CONFIG_PLAT_ORION)	+= arch/arm/plat-orion/
  
  libs-y				:= arch/arm/lib/ $(libs-y)
-@@ -284,6 +305,7 @@
+@@ -284,6 +304,7 @@
  
  archprepare:
  	$(Q)$(MAKE) $(build)=arch/arm/tools kapi

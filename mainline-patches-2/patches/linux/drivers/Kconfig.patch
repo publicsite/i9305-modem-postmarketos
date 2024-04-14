@@ -1,0 +1,19 @@
+--- a/drivers/Kconfig
++++ b/drivers/Kconfig
+@@ -75,12 +75,16 @@
+ 
+ source "drivers/ptp/Kconfig"
+ 
++source "drivers/gpio/Kconfig"
++
+ source "drivers/pinctrl/Kconfig"
+ 
+ source "drivers/gpio/Kconfig"
+ 
+ source "drivers/w1/Kconfig"
+ 
++source "drivers/battery/Kconfig"
++
+ source "drivers/power/Kconfig"
+ 
+ source "drivers/hwmon/Kconfig"

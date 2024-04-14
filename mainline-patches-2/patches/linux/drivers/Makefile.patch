@@ -1,0 +1,21 @@
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -11,6 +11,8 @@
+ MAKEFLAGS += --include-dir=$(srctree)
+ endif
+ 
++obj-y				+= gpio/
++
+ obj-y				+= cache/
+ obj-y				+= irqchip/
+ obj-y				+= bus/
+@@ -120,7 +122,8 @@
+ obj-$(CONFIG_PPS)		+= pps/
+ obj-y				+= ptp/
+ obj-$(CONFIG_W1)		+= w1/
+-obj-y				+= power/
++obj-$(CONFIG_POWER_SUPPLY)	+= battery/
++obj-$(CONFIG_POWER_SUPPLY)	+= power/
+ obj-$(CONFIG_HWMON)		+= hwmon/
+ obj-$(CONFIG_THERMAL)		+= thermal/
+ obj-$(CONFIG_WATCHDOG)		+= watchdog/

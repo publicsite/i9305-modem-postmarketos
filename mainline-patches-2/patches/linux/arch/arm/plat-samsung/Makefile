@@ -9,7 +9,3 @@ obj-y				:=
 obj-m				:=
 obj-n				:= dummy.o
 obj-				:=
-
-# Objects we always build independent of SoC choice
-
-obj-y				+= gpio-config.o
