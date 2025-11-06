@@ -1,5 +1,8 @@
 #!/bin/sh
 
+OLD_UMASK="$(umask)"
+umask 0022
+
 thepwd="$PWD"
 
 sudo apt-get update
@@ -62,3 +65,5 @@ cd $thepwd
 sudo umount mountpoint
 
 sudo losetup -d /dev/loop5
+
+umask "${OLD_UMASK}"
