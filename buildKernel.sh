@@ -1,5 +1,8 @@
 #!/bin/sh
 
+OLD_UMASK="$(umask)"
+umask 0022
+
 thepwd="$PWD"
 
 anarch="$2"
@@ -50,3 +53,5 @@ export CROSS_COMPILE="${oldCROSS_COMPILE}"
 
 cd "${thepwd}"
 sudo abootimg -u "$(find workdir -maxdepth 1 -name "chroot_rootfs_*")/boot/boot.img" -k zImage
+
+umask "${OLD_UMASK}"
