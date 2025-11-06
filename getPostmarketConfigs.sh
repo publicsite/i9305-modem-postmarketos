@@ -4,6 +4,9 @@
 #for each, it contains a kernel config, relevant patches and download location of linux archive
 #the download location is stored in the APKBUILD
 
+OLD_UMASK="$(umask)"
+umask 0022
+
 if [ -d postmarketConfigs ]; then
 	while true; do
 		echo "Would you like to redownload the postmarket kernel configs? [yes/no]"
@@ -24,3 +27,5 @@ find pmaports/device/main -maxdepth 1 -type d -name "linux-*" -exec mv {} postma
 find pmaports/device/community -maxdepth 1 -type d -name "linux-*" -exec mv {} postmarketConfigs/ \;
 find pmaports/device/unmaintained -maxdepth 1 -type d -name "linux-*" -exec mv {} postmarketConfigs/ \;
 rm -rf pmaports
+
+umask "${OLD_UMASK}"
