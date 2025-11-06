@@ -1,4 +1,8 @@
 #!/bin/sh
+
+OLD_UMASK="$(umask)"
+umask 0022
+
 putInConfig(){
 if [ "${3}" = "" ]; then 
 	theresult="=y"
@@ -142,3 +146,6 @@ putInConfig "CONFIG_QC_MODEM_M3" "arch/$anarch/configs/${thedefconfig}"
 
 #patch by J05HYYY, include m3 modem in Kconfig
 	patch -p1 < "${thepwd}/mainline-patches/include-m3-modem-in-Kconfig.patch"
+
+	umask "${OLD_UMASK}"
+	
