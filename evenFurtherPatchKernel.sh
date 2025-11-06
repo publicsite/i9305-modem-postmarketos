@@ -1,4 +1,8 @@
 #!/bin/sh
+
+OLD_UMASK="$(umask)"
+umask 0022
+
 putInConfig(){
 if [ "${3}" = "" ]; then 
 	theresult="=y"
@@ -209,3 +213,6 @@ echo CONFIG_S3C_GPIO_SPACE=0 >> "arch/$anarch/configs/${thedefconfig}"
 
 #takeFromConfig "CONFIG_ARCH_MULTI_V7" "arch/$anarch/configs/${thedefconfig}" " is not set"
 #takeFromConfig "CONFIG_ARCH_MULTI_V6_V7" "arch/$anarch/configs/${thedefconfig}" " is not set"
+
+umask "${OLD_UMASK}"
+
