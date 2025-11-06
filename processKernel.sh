@@ -1,5 +1,8 @@
 #!/bin/sh
 
+OLD_UMASK="$(umask)"
+umask 0022
+
 thepwd="$PWD"
 
 if [ ! -d kernelArchives ]; then
@@ -114,6 +117,8 @@ kernelroot="$PWD"
 find "$thepwd/postmarketConfigs/$akernel" -type f -name "*.patch" | sort | while read line; do
 patch -p1 < "$line"
 done
+
+umask "${OLD_UMASK}"
 
 
 
